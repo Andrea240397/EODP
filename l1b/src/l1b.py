@@ -62,8 +62,20 @@ class l1b(initL1b):
         :param eq_mult: Gain factor, adimensional
         :return: TOA in DN, equalized
         """
-        #TODO
-        return toa
+        #We have to do it along track
+        #[0] gives the numer of rows
+        #[1] gives the number of columns
+        #Python iterates from 0 to -1
+        #python uses brackets, not parenthesis
+
+        #this creates an empty matrix with the size of toa
+        toa_out = np.zeros(toa.shape)  # initialization
+
+        for ialt in range(toa.shape[0]):
+            toa_out[ialt,:] = (toa[ialt,:] - eq_add) / eq_mult
+
+
+        return toa_out
 
     def restoration(self,toa,gain):
         """
@@ -72,10 +84,13 @@ class l1b(initL1b):
         :param gain: gain in [rad/DN]
         :return: TOA in radiances [mW/sr/m2]
         """
-        #TODO
+        toa_out2=np.zeros(toa.shape)
+
+        toa_out2= toa*gain
+
         self.logger.debug('Sanity check. TOA in radiances after gain application ' + str(toa[1,-1]) + ' [mW/m2/sr]')
 
-        return toa
+        return toa_out2
 
     def plotL1bToa(self, toa_l1b, outputdir, band):
         #TODO
