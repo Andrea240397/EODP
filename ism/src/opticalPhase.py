@@ -113,8 +113,29 @@ class opticalPhase(initIsm):
         :param sgm_wv: wavelengths of the input TOA cube
         :param band: band
         :return: TOA image 2D in radiances [mW/m2]
+        //i is the number of row, and j the number of col
+         //1st we need to read the ISRF and normalize it with its area
+         //so we have to divide the ISRF by the integral of the ISRF to normalize it.
         """
-        # TODO
+        #to read the isrf and the isrf wavelengths
+        isrf, isrf_wvs = readIsrf(self.auxdir+self.ismConfig.isrffile, band)
+        isrf_wvs_unit=isrf_wvs*1000
+        toa = np.zeros( (sgm_toa.shape[0],sgm_toa.shape[1])  )
+
+        #double loop for spatial pixel
+        for irow in range (sgm_toa.shape[0]):
+            for jcol in range (sgm_toa.shape[1]):
+
+                # interpolate this to the frequencies of the ISRF
+                cs = interp1d(sgm_wv, sgm_toa[irow,jcol,:], fill_value=(0, 0), bounds_error=False)
+                toa_1d_interpolated = cs(isrf_wvs_unit) #801 positions, and this has to be multiplied with the normalized isrf
+                isrf_n = isrf/(np.sum(isrf))
+                toa_isrf = isrf_n*toa_1d_interpolated
+                L=np.sum(toa_isrf)
+
+                # multiply the TOA by the filter --> multiply the isrf_n by the
+                # Integrate that energy
+                toa[irow,jcol] = L
         return toa
 
 
