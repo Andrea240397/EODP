@@ -92,8 +92,9 @@ class opticalPhase(initIsm):
         :param Tr: Optical transmittance [-]
         :return: TOA image in irradiances [mW/m2]
         """
-        # TODO
-        return toa
+        # REVIEW
+        toa_irrad=Tr*toa*np.pi/4*(D/f)*(D/f)
+        return toa_irrad
 
 
     def applySysMtf(self, toa, Hsys):

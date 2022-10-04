@@ -91,7 +91,29 @@ class mtf:
         :return fnAct: 1D normalised frequencies 2D ACT (f/(1/w))
         :return fnAlt: 1D normalised frequencies 2D ALT (f/(1/w))
         """
-        #TODO
+        #frequence step along and across track
+        eps=1e-6
+        fstepAlt=1/nlines/w
+        fstepAct=1/ncolumns/w
+
+        #calculation of the one dimensional freq vector,
+        #These are the spatial frequencies
+        fAlt= np.arange(-1/(2*w),1/(2*w)-eps,fstepAlt)
+        fAct= np.arange(-1/(2*w),1/(2*w)-eps,fstepAct)
+
+        #normalized frequencies
+        fnAlt= fAlt/(1/w)
+        fnAct= fAct/(1/w)
+
+        #CUt off freq and relative freq
+        cutoff= D/(lambd*focal)
+        frAlt=fAlt/cutoff
+        frAct= fAct/cutoff
+
+        [fnAltxx,fnActxx]= np.meshgrid(fnAlt,fnAct,indexing='ij')
+        fn2D= np.sqrt(fnAltxx*fnAltxx + fnActxx*fnActxx)
+        fr2D= fn2D*(1/w)*cutoff
+
         return fn2D, fr2D, fnAct, fnAlt
 
     def mtfDiffract(self,fr2D):
@@ -100,7 +122,7 @@ class mtf:
         :param fr2D: 2D relative frequencies (f/fc), where fc is the optics cut-off frequency
         :return: diffraction MTF
         """
-        #TODO
+        Hdiff= 2/np.pi*(np.arcos(fr2D) - fr2D* np.sqrt(1-fr2D*fr2D))
         return Hdiff
 
 
