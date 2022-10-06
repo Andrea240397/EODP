@@ -112,7 +112,10 @@ class mtf:
 
         [fnAltxx,fnActxx]= np.meshgrid(fnAlt,fnAct,indexing='ij')
         fn2D= np.sqrt(fnAltxx*fnAltxx + fnActxx*fnActxx)
-        fr2D= fn2D*(1/w)*cutoff
+        fr2D= fn2D*(1/w)/cutoff
+
+        writeMat(self.outdir, "fn2D", fn2D)
+        writeMat(self.outdir, "fr2D", fr2D)
 
         return fn2D, fr2D, fnAct, fnAlt
 
@@ -122,7 +125,7 @@ class mtf:
         :param fr2D: 2D relative frequencies (f/fc), where fc is the optics cut-off frequency
         :return: diffraction MTF
         """
-        Hdiff= 2/np.pi*(np.arcos(fr2D) - fr2D* np.sqrt(1-fr2D*fr2D))
+        Hdiff= 2/np.pi*(np.arccos(fr2D) - fr2D* np.sqrt(1-fr2D*fr2D))
         return Hdiff
 
 
@@ -136,6 +139,8 @@ class mtf:
         :return: Defocus MTF
         """
         #TODO
+        x= np.pi *defocus*fr2D*(1-fr2D)
+        Hdefoc = (2*j1(x))/x
         return Hdefoc
 
     def mtfWfeAberrations(self, fr2D, lambd, kLF, wLF, kHF, wHF):
@@ -149,7 +154,7 @@ class mtf:
         :param wHF: RMS of high-frequency wavefront errors [m]
         :return: WFE Aberrations MTF
         """
-        #TODO
+        Hwfe = np.exp(-fr2D*(1-fr2D)*(kLF*(wLF/lambd)*(wLF/lambd)+kHF*(wHF/lambd)*(wHF/lambd)))
         return Hwfe
 
     def mtfDetector(self,fn2D):
@@ -159,6 +164,7 @@ class mtf:
         :return: detector MTF
         """
         #TODO
+        Hdet=np.abs(np.sin(np.pi*fn2D)/(np.pi*fn2D))
         return Hdet
 
     def mtfSmearing(self, fnAlt, ncolumns, ksmear):
