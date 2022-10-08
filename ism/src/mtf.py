@@ -73,8 +73,6 @@ class mtf:
 
         # Plot cuts ACT/ALT of the MTF
         self.plotMtf(Hdiff, Hdefoc, Hwfe, Hdet, Hsmear, Hmotion, Hsys, nlines, ncolumns, fnAct, fnAlt, directory, band)
-
-
         return Hsys
 
     def freq2d(self,nlines, ncolumns, D, lambd, focal, w):
@@ -163,7 +161,6 @@ class mtf:
         :param fnD: 2D normalised frequencies (f/(1/w))), where w is the pixel width
         :return: detector MTF
         """
-        #TODO
         Hdet=np.abs(np.sin(np.pi*fn2D)/(np.pi*fn2D))
         return Hdet
 
@@ -175,6 +172,11 @@ class mtf:
         :param ksmear: Amplitude of low-frequency component for the motion smear MTF in ALT [pixels]
         :return: Smearing MTF
         """
+        # Smearing is an ALT effect. Calculate the 1D MTF In the ALT direction
+        #using fn2D, size nlines and repeat in the ACT direction with a repmat
+
+        MTFs = np.sinc(ksmear*fnAlt)
+        Hsmear = np.repmat(MTFs,1,150)
         #TODO
         return Hsmear
 
@@ -185,7 +187,8 @@ class mtf:
         :param kmotion: Amplitude of high-frequency component for the motion smear MTF in ALT and ACT
         :return: detector MTF
         """
-        #TODO
+        #remember to use fn2D (normalised frequencies)
+        Hmotion = np.sinc(kmotion*fn2D)
         return Hmotion
 
     def plotMtf(self,Hdiff, Hdefoc, Hwfe, Hdet, Hsmear, Hmotion, Hsys, nlines, ncolumns, fnAct, fnAlt, directory, band):
@@ -206,6 +209,49 @@ class mtf:
         :param band: band
         :return: N/A
         """
+        #PLot in the ALT direction
+        fig = plt. figure(figsize=(20,10))
+        plt.plot(-fnAlt,Hdiff,Label='Diffraction MTF')
+        plt.plot(-fnAlt,Hdefoc,Label='Defocus MTF')
+        plt.plot(-fnAlt,Hwfe,Label='WFE Aberrations MTF')
+        plt.plot(-fnAlt,Hdet,Label='Detector MTF')
+        plt.plot(-fnAlt,Hsmear,Label='Smearing MTF')
+        plt.plot(-fnAlt,Hmotion,Label='Motion blur MTF')
+        plt.plot(-fnAlt,Hsys,'k',linewidth=3,Label='System MTF')
+        auxv = np.arange(0,1.1,0.1)
+        plt.plot(0.5*np.ones(auxv.shape),auxv,'--k',Linewidth=3,label='fNyquist')
+        plt.title('System MTF slice ALT for '+band, fontsize=20)
+        plt.xlabel('Spatial frequencies f/(1/w) [-]', fontsize=16)
+        plt.ylabel('MTF', fontsize=16)
+        plt.grid()
+        plt.legend()
+        saveas_str='system_mtf_cutAlt_'+band
+        savestr = '/home/luss/my_shared_folder/ism_out/system_mtf_cutAlt'
+        plt.savefig(savestr)
+        plt.close(fig)
+        print("Saved image " + savestr)
+
+        #PLot in the ACT direction
+        fig = plt. figure(figsize=(20,10))
+        plt.plot(-fnAct,Hdiff,Label='Diffraction MTF')
+        plt.plot(-fnAct,Hdefoc,Label='Defocus MTF')
+        plt.plot(-fnAct,Hwfe,Label='WFE Aberrations MTF')
+        plt.plot(-fnAct,Hdet,Label='Detector MTF')
+        plt.plot(-fnAct,Hsmear,Label='Smearing MTF')
+        plt.plot(-fnAct,Hmotion,Label='Motion blur MTF')
+        plt.plot(-fnAct,Hsys,'k',linewidth=3,Label='System MTF')
+        auxv = np.arange(0,1.1,0.1)
+        plt.plot(0.5*np.ones(auxv.shape),auxv,'--k',Linewidth=3,label='fNyquist')
+        plt.title('System MTF slice ACT for '+band, fontsize=20)
+        plt.xlabel('Spatial frequencies f/(1/w) [-]', fontsize=16)
+        plt.ylabel('MTF', fontsize=16)
+        plt.grid()
+        plt.legend()
+        saveas_str='system_mtf_cutACT_'+band
+        savestr = '/home/luss/my_shared_folder/ism_out/system_mtf_cutACT'
+        plt.savefig(savestr)
+        plt.close(fig)
+        print("Saved image " + savestr)
         #TODO
 
 

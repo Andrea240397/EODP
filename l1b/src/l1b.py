@@ -73,9 +73,8 @@ class l1b(initL1b):
 
         for ialt in range(toa.shape[0]):
             toa_out[ialt,:] = (toa[ialt,:] - eq_add) / eq_mult
-
-
         return toa_out
+
 
     def restoration(self,toa,gain):
         """
@@ -85,13 +84,21 @@ class l1b(initL1b):
         :return: TOA in radiances [mW/sr/m2]
         """
         toa_out2=np.zeros(toa.shape)
-
         toa_out2= toa*gain
-
         self.logger.debug('Sanity check. TOA in radiances after gain application ' + str(toa[1,-1]) + ' [mW/m2/sr]')
-
         return toa_out2
 
     def plotL1bToa(self, toa_l1b, outputdir, band):
-        #TODO
-        x=1
+        fig_L1b_toa = plt.figure(figsize=(20,10))
+        #EJE X??
+        plt.plot(toa_l1b)
+        plt.title('TOA L1B for '+band, fontsize=20)
+        plt.xlabel('ACT Pixel [-]', fontsize=16)
+        plt.ylabel('TOA [mW/m2s]', fontsize=16)
+        plt.grid()
+        plt.legend()
+        saveas_str='TOA_L1b'+band
+        savestr = '/home/luss/my_shared_folder/l1b_out/TOA_L1b'
+        plt.savefig(savestr)
+        plt.close(fig_L1b_toa)
+        print("Saved image " + savestr)
