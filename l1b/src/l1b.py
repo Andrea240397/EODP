@@ -5,6 +5,7 @@ from l1b.src.initL1b import initL1b
 from common.io.writeToa import writeToa, readToa
 from common.src.auxFunc import getIndexBand
 from common.io.readFactor import readFactor, EQ_MULT, EQ_ADD, NC_EXT
+from config.globalConfig import globalConfig
 import numpy as np
 import os
 import matplotlib.pyplot as plt
@@ -88,10 +89,12 @@ class l1b(initL1b):
         self.logger.debug('Sanity check. TOA in radiances after gain application ' + str(toa[1,-1]) + ' [mW/m2/sr]')
         return toa_out2
 
-    def plotL1bToa(self, toa_l1b, outputdir, band):
+    def plotL1bToa(self, l1b_toa, outputdir, band):
+        #for band in globalConfig.bands:
+        x=1
         fig_L1b_toa = plt.figure(figsize=(20,10))
-        #EJE X??
-        plt.plot(toa_l1b)
+            #EJE X??
+        plt.plot(l1b_toa,label='TOA out')
         plt.title('TOA L1B for '+band, fontsize=20)
         plt.xlabel('ACT Pixel [-]', fontsize=16)
         plt.ylabel('TOA [mW/m2s]', fontsize=16)

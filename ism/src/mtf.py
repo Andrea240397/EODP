@@ -1,10 +1,13 @@
 from math import pi
+
+from numpy.matlib import repmat
+
 from config.ismConfig import ismConfig
 import numpy as np
 import math
+from numpy import matlib as mb
 import matplotlib.pyplot as plt
 from scipy.special import j1
-from numpy.matlib import repmat
 from common.io.readMat import writeMat
 from common.plot.plotMat2D import plotMat2D
 from scipy.interpolate import interp2d
@@ -174,10 +177,9 @@ class mtf:
         """
         # Smearing is an ALT effect. Calculate the 1D MTF In the ALT direction
         #using fn2D, size nlines and repeat in the ACT direction with a repmat
-
+        # ME SALE DISTINTO EL OCTAVO DECIMAL
         MTFs = np.sinc(ksmear*fnAlt)
-        Hsmear = np.repmat(MTFs,1,150)
-        #TODO
+        Hsmear = np.transpose(mb.repmat(MTFs,ncolumns,1))
         return Hsmear
 
     def mtfMotion(self, fn2D, kmotion):
@@ -230,7 +232,7 @@ class mtf:
         plt.savefig(savestr)
         plt.close(fig)
         print("Saved image " + savestr)
-
+""""
         #PLot in the ACT direction
         fig = plt. figure(figsize=(20,10))
         plt.plot(-fnAct,Hdiff,Label='Diffraction MTF')
@@ -253,5 +255,5 @@ class mtf:
         plt.close(fig)
         print("Saved image " + savestr)
         #TODO
-
+"""
 
