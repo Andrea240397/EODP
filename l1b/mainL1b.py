@@ -13,4 +13,3 @@ outdir = '/home/luss/my_shared_folder/l1b_out'
 # Initialise the ISM
 myL1b = l1b(auxdir, indir, outdir)
 myL1b.processModule()
-#testL1B(band)

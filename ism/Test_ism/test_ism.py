@@ -21,7 +21,6 @@ for band in globalConfig.bands:
     max_rel_dif_opt = np.max(np.abs(toa_mine_opt-toa_her_opt))
     print("Max rel diff_opt", max_rel_dif, "band", band)
 
-
     # 3 Plot TOA after the MTF to see the border effect
     fig = plt. figure(figsize=(20,10))
     # QUÉ TOA REPRESENTO????

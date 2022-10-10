@@ -104,7 +104,8 @@ class detectionPhase(initIsm):
         :param wv: Central wavelength of the band [m]
         :return: Toa in photons
         """
-        #TODO
+
+        # TODO
         return toa_ph
 
     def phot2Electr(self, toa, QE):

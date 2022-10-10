@@ -90,12 +90,9 @@ class l1b(initL1b):
         return toa_out2
 
     def plotL1bToa(self, l1b_toa, outputdir, band):
-        #for band in globalConfig.bands:
-        x=1
-        fig_L1b_toa = plt.figure(figsize=(20,10))
-            #EJE X??
+        fig = plt.figure(figsize=(20,10))
         plt.plot(l1b_toa,label='TOA out')
-        plt.title('TOA L1B for '+band, fontsize=20)
+        plt.title('Equalization and Restoration of '+band, fontsize=20)
         plt.xlabel('ACT Pixel [-]', fontsize=16)
         plt.ylabel('TOA [mW/m2s]', fontsize=16)
         plt.grid()
@@ -103,5 +100,5 @@ class l1b(initL1b):
         saveas_str='TOA_L1b'+band
         savestr = '/home/luss/my_shared_folder/l1b_out/TOA_L1b'
         plt.savefig(savestr)
-        plt.close(fig_L1b_toa)
+        plt.close(fig)
         print("Saved image " + savestr)
