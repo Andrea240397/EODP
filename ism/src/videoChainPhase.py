@@ -55,7 +55,8 @@ class videoChainPhase(initIsm):
         :param gain_adc: Gain of the Analog-to-digital conversion [-]
         :return: output toa in [V]
         """
-        #TODO
+        # electrons converted to voltage using the output conversion factor, then amplified by the gain
+        toa = toa * OCF * gain_adc
         return toa
 
     def digitisation(self, toa, bit_depth, min_voltage, max_voltage):
@@ -67,6 +68,8 @@ class videoChainPhase(initIsm):
         :param max_voltage: maximum voltage
         :return: toa in digital counts
         """
-        #TODO
+        # conversion of the voltage to digital counts, the value stored in the on-board memory.
+        # SIgnal is digitalised with a given bit depth
+        toa_dn = np.round(toa/(max_voltage-min_voltage)*(2*(np.exp(bit_depth))-1))
         return toa_dn
 

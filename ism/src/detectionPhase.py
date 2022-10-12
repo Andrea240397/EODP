@@ -1,9 +1,12 @@
+import statistics
 
 from ism.src.initIsm import initIsm
 import numpy as np
 from common.io.writeToa import writeToa
 from common.plot.plotMat2D import plotMat2D
 from common.plot.plotF import plotF
+import scipy.stats as stats
+from auxiliary.constants import constants
 
 class detectionPhase(initIsm):
 
@@ -104,8 +107,9 @@ class detectionPhase(initIsm):
         :param wv: Central wavelength of the band [m]
         :return: Toa in photons
         """
-
-        # TODO
+        Ein = toa*area_pix*tint
+        Ephoton= (self.constants.h_planck * self.constants.speed_light) / wv
+        toa_ph = Ein/Ephoton
         return toa_ph
 
     def phot2Electr(self, toa, QE):
@@ -115,7 +119,7 @@ class detectionPhase(initIsm):
         :param QE: Quantum efficiency [e-/ph]
         :return: toa in electrons
         """
-        #TODO
+        toae= toa * QE
         return toae
 
     def badDeadPixels(self, toa,bad_pix,dead_pix,bad_pix_red,dead_pix_red):
@@ -138,7 +142,10 @@ class detectionPhase(initIsm):
         :param kprnu: multiplicative factor to the standard normal deviation for the PRNU
         :return: TOA after adding PRNU [e-]
         """
-        #TODO
+        #prnu = stats.norm(toa,0,1) * kprnu
+        #toa = toa * (1+prnu)
+        # HAY QUE HACER UN FOR??¡¡
+        # TODO
         return toa
 
 
@@ -153,5 +160,11 @@ class detectionPhase(initIsm):
         :param ds_B_coeff: Empirical parameter of the model 6040 K
         :return: TOA in [e-] with dark signal
         """
+        #dsnu = abs(stats.norm(toa,0,1))* kdsnu
+    #constant component of the dark signal is temperature dependent (thermal noise)
+        #Sd = ds_A_coeff *(T/Tref)*(T/Tref)*(T/Tref)*np.exp(-ds_B_coeff*(1/T - 1/Tref))
+    #total dark signal changes per pixel:
+        #DS = Sd * (1+ dsnu)
+        #toa = toa + DS
         #TODO
         return toa

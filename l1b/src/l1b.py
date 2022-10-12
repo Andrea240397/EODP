@@ -70,11 +70,11 @@ class l1b(initL1b):
         #python uses brackets, not parenthesis
 
         #this creates an empty matrix with the size of toa
-        toa_out = np.zeros(toa.shape)  # initialization
+        l1b_toa_eq = np.zeros(toa.shape)  # initialization
 
         for ialt in range(toa.shape[0]):
-            toa_out[ialt,:] = (toa[ialt,:] - eq_add) / eq_mult
-        return toa_out
+            l1b_toa_eq[ialt,:] = (toa[ialt,:] - eq_add) / eq_mult
+        return l1b_toa_eq
 
 
     def restoration(self,toa,gain):
@@ -84,21 +84,23 @@ class l1b(initL1b):
         :param gain: gain in [rad/DN]
         :return: TOA in radiances [mW/sr/m2]
         """
-        toa_out2=np.zeros(toa.shape)
-        toa_out2= toa*gain
+        l1b_toa =np.zeros(toa.shape)
+        l1b_toa = toa*gain
         self.logger.debug('Sanity check. TOA in radiances after gain application ' + str(toa[1,-1]) + ' [mW/m2/sr]')
-        return toa_out2
+        return l1b_toa
 
+""""
     def plotL1bToa(self, l1b_toa, outputdir, band):
         fig = plt.figure(figsize=(20,10))
-        plt.plot(l1b_toa,label='TOA out')
+        plt.plot(l1b_toa[0:149,99],label='l1b_toa')
         plt.title('Equalization and Restoration of '+band, fontsize=20)
         plt.xlabel('ACT Pixel [-]', fontsize=16)
         plt.ylabel('TOA [mW/m2s]', fontsize=16)
         plt.grid()
         plt.legend()
-        saveas_str='TOA_L1b'+band
-        savestr = '/home/luss/my_shared_folder/l1b_out/TOA_L1b'
+        saveas_str='l1b_toa'+band
+        savestr = '/home/luss/my_shared_folder/l1b_out/l1b_toa'
         plt.savefig(savestr)
         plt.close(fig)
         print("Saved image " + savestr)
+"""
