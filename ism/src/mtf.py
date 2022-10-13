@@ -212,23 +212,25 @@ class mtf:
         :param band: band
         :return: N/A
         """
+        ncolumns= int(ncolumns/2)
         #PLot in the ALT direction
         fig = plt. figure(figsize=(20,10))
-        plt.plot(-fnAlt[0:ncolumns], (Hdiff[0:ncolumns,nlines]),Label='Diffraction MTF')
-        plt.plot(-fnAlt[0:ncolumns], (Hdefoc[0:ncolumns,nlines]),Label='Defocus MTF')
-        plt.plot(-fnAlt[0:ncolumns], (Hwfe[0:ncolumns,nlines]),Label='WFE Aberrations MTF')
-        plt.plot(-fnAlt[0:ncolumns], (Hdet[0:ncolumns,nlines]),Label='Detector MTF')
-        plt.plot(-fnAlt[0:ncolumns], (Hsmear[0:ncolumns,nlines]),Label='Smearing MTF')
-        plt.plot(-fnAlt[0:ncolumns], (Hmotion[0:ncolumns,nlines]),Label='Motion blur MTF')
-        plt.plot(-fnAlt[0:ncolumns], (Hsys[0:ncolumns,nlines]),'k',linewidth=3,Label='System MTF')
+        x= -fnAlt[0:ncolumns]
+        plt.plot(-fnAct[0:ncolumns], (Hdiff[0:ncolumns,nlines]),Label='Diffraction MTF')
+        plt.plot(-fnAct[0:ncolumns], (Hdefoc[0:ncolumns,nlines]),Label='Defocus MTF')
+        plt.plot(-fnAct[0:ncolumns], (Hwfe[0:ncolumns,nlines]),Label='WFE Aberrations MTF')
+        plt.plot(-fnAct[0:ncolumns], (Hdet[0:ncolumns,nlines]),Label='Detector MTF')
+        plt.plot(-fnAct[0:ncolumns], (Hsmear[0:ncolumns,nlines]),Label='Smearing MTF')
+        plt.plot(-fnAct[0:ncolumns], (Hmotion[0:ncolumns,nlines]),Label='Motion blur MTF')
+        plt.plot(-fnAct[0:ncolumns], (Hsys[0:ncolumns,nlines]),'k',linewidth=3,Label='System MTF')
         auxv = np.arange(0,1.1,0.1)
         plt.plot(0.5*np.ones(auxv.shape),auxv,'--k',Linewidth=3,label='fNyquist')
-        plt.title('System MTF slice ALT for'+band, fontsize=20)
+        plt.title('System MTF slice ALT for'+ band, fontsize=20)
         plt.xlabel('Spatial frequencies f/(1/w) [-]', fontsize=16)
         plt.ylabel('MTF', fontsize=16)
         plt.grid()
         plt.legend()
-        saveas_str='system_mtf_cutAlt'+band
+        saveas_str='system_mtf_cutAlt'+ band
         savestr = '/home/luss/my_shared_folder/ism_out/system_mtf_cutAlt'
         plt.savefig(savestr)
         plt.close(fig)

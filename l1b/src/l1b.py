@@ -89,10 +89,12 @@ class l1b(initL1b):
         self.logger.debug('Sanity check. TOA in radiances after gain application ' + str(toa[1,-1]) + ' [mW/m2/sr]')
         return l1b_toa
 
-""""
+
     def plotL1bToa(self, l1b_toa, outputdir, band):
         fig = plt.figure(figsize=(20,10))
-        plt.plot(l1b_toa[0:149,99],label='l1b_toa')
+        x = l1b_toa.shape
+        
+        plt.plot(l1b_toa[:,l1b_toa.shape[1]],label='l1b_toa')
         plt.title('Equalization and Restoration of '+band, fontsize=20)
         plt.xlabel('ACT Pixel [-]', fontsize=16)
         plt.ylabel('TOA [mW/m2s]', fontsize=16)
@@ -103,4 +105,3 @@ class l1b(initL1b):
         plt.savefig(savestr)
         plt.close(fig)
         print("Saved image " + savestr)
-"""

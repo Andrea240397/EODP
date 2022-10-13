@@ -69,7 +69,7 @@ class videoChainPhase(initIsm):
         :return: toa in digital counts
         """
         # conversion of the voltage to digital counts, the value stored in the on-board memory.
-        # SIgnal is digitalised with a given bit depth
-        toa_dn = np.round(toa/(max_voltage-min_voltage)*(2*(np.exp(bit_depth))-1))
+        # Signal is digitalised with a given bit depth
+        toa_dn = np.round(toa/(max_voltage-min_voltage)*(2**bit_depth-1))
         return toa_dn
 

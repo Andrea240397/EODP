@@ -107,20 +107,21 @@ class detectionPhase(initIsm):
         :param wv: Central wavelength of the band [m]
         :return: Toa in photons
         """
+        toa = toa*1e-3
         Ein = toa*area_pix*tint
         Ephoton= (self.constants.h_planck * self.constants.speed_light) / wv
         toa_ph = Ein/Ephoton
         return toa_ph
 
-    def phot2Electr(self, toa, QE):
+    def phot2Electr(self, toa_ph, QE):
         """
         Conversion of photons to electrons
         :param toa: input TOA in photons [ph]
         :param QE: Quantum efficiency [e-/ph]
         :return: toa in electrons
         """
-        toae= toa * QE
-        return toae
+        toa= toa_ph * QE
+        return toa
 
     def badDeadPixels(self, toa,bad_pix,dead_pix,bad_pix_red,dead_pix_red):
         """
@@ -132,7 +133,23 @@ class detectionPhase(initIsm):
         :param dead_pix_red: Reduction in the quantum efficiency for the dead pixels [-, over 1]
         :return: toa in e- including bad & dead pixels
         """
-        #TODO
+        n_pix_bad= int(bad_pix/100*toa.shape[1])
+        n_pix_dead = int(dead_pix/100*toa.shape[1])
+
+        if n_pix_dead==0:
+            a=1
+        else:
+            step_dead = int(toa.shape[1]/n_pix_dead)
+            idx_dead = np.arange(0, toa.shape[1], step_dead)
+            for j in range (idx_dead.shape[0]):
+                toa[idx_dead[j],:] = toa[idx_dead[j],:]*(1-dead_pix_red)
+        if n_pix_bad==0:
+            b=2
+        else:
+            step_bad = int(toa.shape[1]/n_pix_bad)
+            idx_bad = np.arange(5, toa.shape[1], step_bad) # Distribute evenly in the CCD
+            for i in range (idx_bad.shape[0]):
+                toa[idx_bad[i],:] = toa[idx_bad[i],:]*(1-bad_pix_red)
         return toa
 
     def prnu(self, toa, kprnu):
@@ -142,10 +159,8 @@ class detectionPhase(initIsm):
         :param kprnu: multiplicative factor to the standard normal deviation for the PRNU
         :return: TOA after adding PRNU [e-]
         """
-        #prnu = stats.norm(toa,0,1) * kprnu
-        #toa = toa * (1+prnu)
-        # HAY QUE HACER UN FOR??¡¡
-        # TODO
+        prnu = np.random.normal(0,1,toa.shape[1]) * kprnu
+        toa = toa * (1+prnu)
         return toa
 
 
@@ -160,11 +175,10 @@ class detectionPhase(initIsm):
         :param ds_B_coeff: Empirical parameter of the model 6040 K
         :return: TOA in [e-] with dark signal
         """
-        #dsnu = abs(stats.norm(toa,0,1))* kdsnu
+        dsnu = abs(np.random.normal(0,1,toa.shape[1]))* kdsnu
     #constant component of the dark signal is temperature dependent (thermal noise)
-        #Sd = ds_A_coeff *(T/Tref)*(T/Tref)*(T/Tref)*np.exp(-ds_B_coeff*(1/T - 1/Tref))
+        Sd = ds_A_coeff *(T/Tref)*(T/Tref)*(T/Tref)*np.exp(-ds_B_coeff*(1/T - 1/Tref))
     #total dark signal changes per pixel:
-        #DS = Sd * (1+ dsnu)
-        #toa = toa + DS
-        #TODO
+        DS = Sd * (1+ dsnu)
+        toa = toa + DS
         return toa
