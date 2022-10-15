@@ -141,15 +141,16 @@ class detectionPhase(initIsm):
         else:
             step_dead = int(toa.shape[1]/n_pix_dead)
             idx_dead = np.arange(0, toa.shape[1], step_dead)
-            for j in range (idx_dead.shape[0]):
+            for j in range(idx_dead.shape[0]):
                 toa[idx_dead[j],:] = toa[idx_dead[j],:]*(1-dead_pix_red)
         if n_pix_bad==0:
             a=0
         else:
             step_bad = int(toa.shape[1]/n_pix_bad)
             idx_bad = np.arange(5, toa.shape[1], step_bad) # Distribute evenly in the CCD
-            for i in range(idx_bad.shape[0]):
-                toa[idx_bad[i],:] = toa[idx_bad[i],:]*(1-bad_pix_red)
+            #for i in range(idx_bad.shape[0]):
+                #toa[idx_bad[i],:] = toa[idx_bad[i],:]*(1-bad_pix_red)
+        toa[:,idx_bad]=toa[:,idx_bad]*(1-bad_pix_red)
         return toa
 
 
@@ -161,7 +162,7 @@ class detectionPhase(initIsm):
         :return: TOA after adding PRNU [e-]
         """
         prnu = np.random.normal(0,1,toa.shape[1]) * kprnu
-        toa = toa * (1+prnu)
+        toa[0:toa.shape[1]] = toa[0:toa.shape[1]] * (1+prnu)
         return toa
 
 
@@ -181,5 +182,5 @@ class detectionPhase(initIsm):
         Sd = ds_A_coeff *(T/Tref)*(T/Tref)*(T/Tref)*np.exp(-ds_B_coeff*(1/T - 1/Tref))
     #total dark signal changes per pixel:
         DS = Sd * (1+ dsnu)
-        toa = toa + DS
+        toa[0:toa.shape[1]] = toa[0:toa.shape[1]] + DS
         return toa
