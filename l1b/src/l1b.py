@@ -92,10 +92,8 @@ class l1b(initL1b):
 
     def plotL1bToa(self, l1b_toa, outputdir, band):
         fig = plt.figure(figsize=(20,10))
-        x = l1b_toa.shape
-        
-        plt.plot(l1b_toa[:,l1b_toa.shape[1]],label='l1b_toa')
-        plt.title('Equalization and Restoration of '+band, fontsize=20)
+        y = range(l1b_toa.shape[1])
+        plt.plot(l1b_toa,y,Label='l1b_toa')
         plt.xlabel('ACT Pixel [-]', fontsize=16)
         plt.ylabel('TOA [mW/m2s]', fontsize=16)
         plt.grid()

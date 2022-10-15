@@ -124,7 +124,7 @@ class detectionPhase(initIsm):
         return toa
 
     def badDeadPixels(self, toa,bad_pix,dead_pix,bad_pix_red,dead_pix_red):
-        """
+        """"
         Bad and dead pixels simulation
         :param toa: input toa in [e-]
         :param bad_pix: Percentage of bad pixels in the CCD [%]
@@ -133,8 +133,8 @@ class detectionPhase(initIsm):
         :param dead_pix_red: Reduction in the quantum efficiency for the dead pixels [-, over 1]
         :return: toa in e- including bad & dead pixels
         """
-        n_pix_bad= int(bad_pix/100*toa.shape[1])
-        n_pix_dead = int(dead_pix/100*toa.shape[1])
+        n_pix_bad= int((bad_pix/100)*toa.shape[1])
+        n_pix_dead = int((dead_pix/100)*toa.shape[1])
 
         if n_pix_dead==0:
             a=1
@@ -144,13 +144,14 @@ class detectionPhase(initIsm):
             for j in range (idx_dead.shape[0]):
                 toa[idx_dead[j],:] = toa[idx_dead[j],:]*(1-dead_pix_red)
         if n_pix_bad==0:
-            b=2
+            a=0
         else:
             step_bad = int(toa.shape[1]/n_pix_bad)
             idx_bad = np.arange(5, toa.shape[1], step_bad) # Distribute evenly in the CCD
-            for i in range (idx_bad.shape[0]):
+            for i in range(idx_bad.shape[0]):
                 toa[idx_bad[i],:] = toa[idx_bad[i],:]*(1-bad_pix_red)
         return toa
+
 
     def prnu(self, toa, kprnu):
         """
