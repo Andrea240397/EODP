@@ -63,7 +63,23 @@ class l1c(initL1c):
         :return: L1C radiances, L1C latitude and longitude in degrees
         '''
         tck = bisplrep(lat, lon, toa)
-        #TODO
+        m= mgrs.MGRS()
+        mgrs_tiles = set([])
+
+        for ialt in range(toa.shape[1]):
+            for iact in range(toa.shape[0]):
+                my_mgrs = str(m.toMGRS(lat[iact,ialt],lon[iact,ialt], inDegrees=True, MGRSPrecision= self.l1cConfig.mgrs_tile_precision))
+                mgrs_tiles.add(my_mgrs)
+
+        mgrs_tiles=list(mgrs_tiles)
+        lat_l1c = np.zeros(len(mgrs_tiles))
+        lon_l1c= np.zeros(len(mgrs_tiles))
+        toa_l1c = np.zeros(len(mgrs_tiles))
+
+        for i in range(len(mgrs_tiles)):
+            lat_l1c[i],lon_l1c[i] = m.toLatLon(mgrs_tiles[i], True)
+            toa_l1c[i] = bisplev(lat_l1c[i],lon_l1c[i],tck)
+
         return lat_l1c, lon_l1c, toa_l1c
 
     def checkSize(self, lat,toa):
