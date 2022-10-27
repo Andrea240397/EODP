@@ -124,7 +124,7 @@ class opticalPhase(initIsm):
         #to read the isrf and the isrf wavelengths
         isrf, isrf_wvs = readIsrf(self.auxdir+self.ismConfig.isrffile, band)
         isrf_wvs_unit=isrf_wvs*1000
-        toa = np.zeros( (sgm_toa.shape[0],sgm_toa.shape[1])  )
+        toa = np.zeros((sgm_toa.shape[0],sgm_toa.shape[1]))
 
         #double loop for spatial pixel
         for irow in range (sgm_toa.shape[0]):

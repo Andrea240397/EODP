@@ -33,3 +33,19 @@ toa_her3 = readToa('/home/luss/my_shared_folder/EODP_TER_2021/EODP-TS-L1B/output
 max_rel_dif3 = np.max(np.abs(toa_mine3 - toa_her3))
 print("Max rel dif", max_rel_dif3, "BAND VNIR-3")
 
+
+l1b_toa_eq = readToa('/home/luss/my_shared_folder/l1b_out/', 'l1b_toa_VNIR-3.nc')
+l1b_toa_wo_eq = readToa('/home/luss/my_shared_folder/l1b_out/Without_eq/', 'l1b_toa_VNIR-3.nc')
+
+mid_value = int(l1b_toa_eq.shape[0]/2)
+mid_value2 = int(l1b_toa_wo_eq.shape[0]/2)
+fig,ax = plt.subplots()
+ax.plot(l1b_toa_eq[mid_value,:],'r',Label='TOA with Equalization')
+ax.plot(l1b_toa_wo_eq[mid_value2,:], 'b',Label='TOA without Equalization')
+plt.title('TOA L1B - for VNIR-3')
+plt.xlabel('ACT Pixel [-]')
+plt.ylabel('TOA [mW/m2/sr]')
+plt.grid()
+plt.legend()
+plt.show()
+fig.savefig('Comparison_VNIR-0_graph.png')

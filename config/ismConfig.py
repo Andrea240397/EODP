@@ -12,6 +12,13 @@ class ismConfig:
         self.pix_size = 30e-6                    # [m] Pixel size in microns for the MS channels
         self.t_int = 0.00672                     # [s] Integration time
 
+        #For the Geometry module
+        #self.pix_size = 42e-6
+        #self.t_int = 0.0428
+        #self.D = 0.07565
+        #self.f = 0.2345
+
+
         # Optical system
         self.D = 0.150                           # [m] Telescope pupil diameter
         self.f = 0.5262                          # [m] Focal length
@@ -74,7 +81,8 @@ class ismConfig:
         #--------------------------------------------------------------------------------
         # Optical stage. Use the PSF convolution. If False, will use the MTF
         self.do_psf_conv = False
-        # Detection stage errors and effects
+        # Detection stage errors and effects,
+        # SOLO FALSE PARA EL GEOMETRY MODULE
         self.apply_prnu = True
         self.apply_dark_signal = True
         self.apply_bad_dead = True

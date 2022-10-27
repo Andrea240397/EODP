@@ -8,6 +8,7 @@ from auxiliary.constants import constants
 
 
 #1. Check for all the bands that the difference in the ism_toa_ is less than 0.01
+# BAND 0
 toa_mine0 = readToa('/home/luss/my_shared_folder/ism_out/', 'ism_toa_VNIR-0.nc')  #my ouput toa
 toa_her0 = readToa('/home/luss/my_shared_folder/EODP_TER_2021/EODP-TS-ISM/output/', 'ism_toa_VNIR-0.nc')
 max_rel_dif0 = np.max(np.abs(toa_mine0-toa_her0))
@@ -23,13 +24,14 @@ print("Max rel diff", max_rel_dif1, "VNIR-1")
 toa_mine2 = readToa('/home/luss/my_shared_folder/ism_out/', 'ism_toa_VNIR-2.nc')  #my ouput toa
 toa_her2 = readToa('/home/luss/my_shared_folder/EODP_TER_2021/EODP-TS-ISM/output/', 'ism_toa_VNIR-2.nc')
 max_rel_dif2 = np.max(np.abs(toa_mine2-toa_her2))
-print("Max rel diff", max_rel_dif1, "VNIR-2")
+print("Max rel diff", max_rel_dif2, "VNIR-2")
 
     #BAND 3
 toa_mine3 = readToa('/home/luss/my_shared_folder/ism_out/', 'ism_toa_VNIR-3.nc')  #my ouput toa
 toa_her3 = readToa('/home/luss/my_shared_folder/EODP_TER_2021/EODP-TS-ISM/output/', 'ism_toa_VNIR-3.nc')
 max_rel_dif3 = np.max(np.abs(toa_mine3-toa_her3))
-print("Max rel diff", max_rel_dif1, "VNIR-3")
+#max_rel_dif3 = toa_mine3-toa_her3
+print("Max rel diff", max_rel_dif3, "VNIR-3")
 
 
 

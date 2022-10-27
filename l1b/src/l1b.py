@@ -94,7 +94,7 @@ class l1b(initL1b):
         mid_value = int(l1b_toa.shape[0]/2)
         fig,ax = plt.subplots()
         ax.plot(l1b_toa[mid_value,:],'r')
-        plt.title('TOA L1B - Equalization and Restoration for '+band)
+        plt.title('TOA L1B - With Equalization for '+band)
         plt.xlabel('ACT Pixel [-]')
         plt.ylabel('TOA [mW/m2/sr]')
         plt.show()

@@ -70,6 +70,12 @@ class videoChainPhase(initIsm):
         """
         # conversion of the voltage to digital counts, the value stored in the on-board memory.
         # Signal is digitalised with a given bit depth
-        toa_dn = np.round(toa/(max_voltage-min_voltage)*(2**bit_depth-1))
+        toa_dn = np.round((toa/(max_voltage-min_voltage))*(2**(bit_depth)-1))
+        for i in range(toa_dn.shape[0]):
+            for j in range(toa_dn.shape[1]):
+                if toa_dn[i,j] > 2**(bit_depth)-1:
+                    toa_dn[i,j] = 2**(bit_depth)-1
+                if toa_dn[i,j] < 0:
+                    toa_dn[i,j] = 0
         return toa_dn
 
