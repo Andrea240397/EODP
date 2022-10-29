@@ -34,18 +34,57 @@ max_rel_dif3 = np.max(np.abs(toa_mine3 - toa_her3))
 print("Max rel dif", max_rel_dif3, "BAND VNIR-3")
 
 
-l1b_toa_eq = readToa('/home/luss/my_shared_folder/l1b_out/', 'l1b_toa_VNIR-3.nc')
-l1b_toa_wo_eq = readToa('/home/luss/my_shared_folder/l1b_out/Without_eq/', 'l1b_toa_VNIR-3.nc')
 
-mid_value = int(l1b_toa_eq.shape[0]/2)
+# Plot TOA with and without equalization
+l1b_toa_eq = readToa('/home/luss/my_shared_folder/l1b_out/', 'l1b_toa_VNIR-0.nc')
+l1b_toa_wo_eq = readToa('/home/luss/my_shared_folder/l1b_out/Without_eq/', 'l1b_toa_VNIR-0.nc')
+outdir = '/home/luss/my_shared_folder/l1b_out/'
+
+mid_value=int(l1b_toa_eq.shape[0]/2)
 mid_value2 = int(l1b_toa_wo_eq.shape[0]/2)
-fig,ax = plt.subplots()
+fig,ax= plt.subplots()
 ax.plot(l1b_toa_eq[mid_value,:],'r',Label='TOA with Equalization')
 ax.plot(l1b_toa_wo_eq[mid_value2,:], 'b',Label='TOA without Equalization')
-plt.title('TOA L1B - for VNIR-3')
+plt.title('TOA L1B - for VNIR-0')
 plt.xlabel('ACT Pixel [-]')
 plt.ylabel('TOA [mW/m2/sr]')
 plt.grid()
 plt.legend()
 plt.show()
-fig.savefig('Comparison_VNIR-0_graph.png')
+fig.savefig(outdir+'Comparison_VNIR-0_graph.png')
+
+
+# Plot the  restored signal l1b_toa and the toa after the isrf for the central ALT Position
+l1b_toa_rest = readToa('/home/luss/my_shared_folder/l1b_out/', 'l1b_toa_VNIR-3.nc')
+l1b_toa_isrf = readToa('/home/luss/my_shared_folder/ism_out/', 'ism_toa_isrf_VNIR-3.nc')
+outdir = '/home/luss/my_shared_folder/l1b_out/'
+mid_value3= int(l1b_toa_rest.shape[0]/2)
+mid_value4 = int(l1b_toa_isrf.shape[0]/2)
+fig,ax2=plt.subplots()
+ax2.plot(l1b_toa_rest[mid_value3,:],'r',Label='TOA restored')
+ax2.plot(l1b_toa_isrf[mid_value4,:],'b',Label='TOA after isrf')
+plt.title('TOA restored and after ISRF for VNIR-3')
+plt.xlabel('ALT PIxel [-]')
+plt.ylabel('TOA [mW/m2/sr]')
+plt.grid()
+plt.legend()
+plt.show()
+fig.savefig(outdir+'Comparison_rest_isrf_VNIR-3.png')
+
+
+# For the geometry module, compared L1B_TOA and TOA_ISRF
+l1b_toa_rest_geo = readToa('/home/luss/my_shared_folder/l1b_out/l1b_out_geo/', 'l1b_toa_VNIR-0.nc')
+l1b_toa_isrf_geo = readToa('/home/luss/my_shared_folder/ism_out/ism_out_geo/', 'ism_toa_isrf_VNIR-0.nc')
+outdir = '/home/luss/my_shared_folder/l1b_out/l1b_out_geo/'
+mid_value5= int(l1b_toa_rest_geo.shape[1]/2)
+mid_value6 = int(l1b_toa_isrf_geo.shape[1]/2)
+fig,ax3=plt.subplots()
+ax3.plot(l1b_toa_rest_geo[mid_value5,:],'r',Label='L1B TOA')
+ax3.plot(l1b_toa_isrf_geo[mid_value6,:],'b',Label='ISRF TOA')
+plt.title('TOA restored and TOA ISRF for VNIR-0')
+plt.xlabel('ACT PIxel [-]')
+plt.ylabel('TOA [mW/m2/sr]')
+plt.grid()
+plt.legend()
+plt.show()
+fig.savefig(outdir+'Comparison_rest_isrf_GEO_VNIR-0.png')
